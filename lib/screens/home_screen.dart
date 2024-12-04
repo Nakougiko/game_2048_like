@@ -16,19 +16,20 @@ class HomeScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-              icon: const Icon(Icons.info_outline),
-              color: Colors.white,
-              onPressed: () {
-                // Affiche une boite de dialogue av les informations
-                showAboutDialog(
-                  context: context,
-                  applicationName: '2048 Like',
-                  children: [
-                    const Text(
-                        'Un jeu 2048, développé en Flutter par GOULOIS Lukas'),
-                  ],
-                );
-              }),
+            icon: const Icon(Icons.info_outline),
+            color: Colors.white,
+            onPressed: () {
+              // Affiche une boite de dialogue avec les informations
+              showAboutDialog(
+                context: context,
+                applicationName: '2048 Like',
+                children: [
+                  const Text(
+                      'Un jeu 2048, développé en Flutter par GOULOIS Lukas'),
+                ],
+              );
+            },
+          ),
         ],
       ),
       body: Column(
@@ -69,8 +70,16 @@ class HomeScreen extends StatelessWidget {
                 ),
               ),
             ),
-          )
+          ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Fonction vide pour l'instant
+          print('Nouveau jeu demandé');
+        },
+        child: const Icon(Icons.refresh),
+        tooltip: 'Nouveau jeu',
       ),
     );
   }
