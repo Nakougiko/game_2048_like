@@ -1,11 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_swipe_detector/flutter_swipe_detector.dart';
 import '../widgets/board_painter.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String _swipeDirection = ""; // Variable pour afficher la direction
+
+  void _handleSwipe(SwipeDirection direction) {
+    setState(() {
+      // Déterminer la direction et effectuer des actions
+      switch (direction) {
+        case SwipeDirection.up:
+          _swipeDirection = "Haut";
+          break;
+        case SwipeDirection.down:
+          _swipeDirection = "Bas";
+          break;
+        case SwipeDirection.left:
+          _swipeDirection = "Gauche";
+          break;
+        case SwipeDirection.right:
+          _swipeDirection = "Droite";
+          break;
+        default:
+          _swipeDirection = "";
+      }
+    });
+
+    // Affiche la direction dans la console (à remplacer par des actions)
+    print("Balayage détecté : $_swipeDirection");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Scaffold pour la structure de la page
       appBar: AppBar(
         title: const Text('2048 Like'),
         backgroundColor: Theme.of(context).colorScheme.primary,
@@ -14,59 +46,34 @@ class HomeScreen extends StatelessWidget {
           fontSize: 24,
           fontWeight: FontWeight.bold,
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.info_outline),
-            color: Colors.white,
-            onPressed: () {
-              // Affiche une boite de dialogue avec les informations
-              showAboutDialog(
-                context: context,
-                applicationName: '2048 Like',
-                children: [
-                  const Text(
-                      'Un jeu 2048, développé en Flutter par GOULOIS Lukas'),
-                ],
-              );
-            },
-          ),
-        ],
       ),
       body: Column(
-        // Corps de la page
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
-              "Coups : 0", // Texte statique temporaire pour le compteur de coups
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              "Coups : 0", // Temporaire
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ),
           Expanded(
-            // Permet au widget enfant de prendre toute la place disponible
             child: Center(
               child: AspectRatio(
                 aspectRatio: 1,
-                child: CustomPaint(
-                  painter: BoardPainter([
-                    2,
-                    0,
-                    4,
-                    8,
-                    0,
-                    2,
-                    4,
-                    16,
-                    8,
-                    0,
-                    0,
-                    2,
-                    32,
-                    0,
-                    4,
-                    2
-                  ]), // Valeur fictive
-                  child: Container(),
+                child: SwipeDetector(
+                  onSwipeUp: (Offset offset) =>
+                      _handleSwipe(SwipeDirection.up),
+                  onSwipeDown: (Offset offset) =>
+                      _handleSwipe(SwipeDirection.down),
+                  onSwipeLeft: (Offset offset) =>
+                      _handleSwipe(SwipeDirection.left),
+                  onSwipeRight: (Offset offset) =>
+                      _handleSwipe(SwipeDirection.right),
+                  child: CustomPaint(
+                    painter: BoardPainter(
+                        [2, 0, 4, 8, 0, 2, 4, 16, 8, 0, 0, 2, 32, 0, 4, 2]),
+                    child: Container(),
+                  ),
                 ),
               ),
             ),
@@ -75,7 +82,6 @@ class HomeScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Fonction vide pour l'instant
           print('Nouveau jeu demandé');
         },
         child: const Icon(Icons.refresh),
