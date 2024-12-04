@@ -8,9 +8,11 @@ class BoardPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     // Peinture pour le fond
-    Paint backgroundPaint = Paint()..color = Colors.grey;
+    Paint backgroundPaint = Paint()..color = Colors.grey[300]!;
     canvas.drawRect(
-        Rect.fromLTWH(0, 0, size.width, size.height), backgroundPaint);
+      Rect.fromLTWH(0, 0, size.width, size.height),
+      backgroundPaint,
+    );
 
     // Taille de chaque cellule
     double cellSize = size.width / 4;
@@ -23,11 +25,17 @@ class BoardPainter extends CustomPainter {
     // Dessine les lignes verticales et horizontales
     for (int i = 1; i < 4; i++) {
       // Lignes verticales
-      canvas.drawLine(Offset(cellSize * i, 0),
-          Offset(cellSize * i, size.height), linePaint);
+      canvas.drawLine(
+        Offset(cellSize * i, 0),
+        Offset(cellSize * i, size.height),
+        linePaint,
+      );
       // Lignes horizontales
       canvas.drawLine(
-          Offset(0, cellSize * i), Offset(size.width, cellSize * i), linePaint);
+        Offset(0, cellSize * i),
+        Offset(size.width, cellSize * i),
+        linePaint,
+      );
     }
 
     // Dessine les cellules
@@ -36,7 +44,7 @@ class BoardPainter extends CustomPainter {
         int index = row * 4 + col;
         int value = values[index];
 
-        // Choix de la couleurs selon la valeur
+        // Couleur basée sur bitLength
         Paint cellPaint = Paint()
           ..color = value == 0
               ? Colors.white
@@ -46,14 +54,16 @@ class BoardPainter extends CustomPainter {
         double left = col * cellSize;
         double top = row * cellSize;
         canvas.drawRect(
-            Rect.fromLTWH(left, top, cellSize, cellSize), cellPaint);
+          Rect.fromLTWH(left, top, cellSize, cellSize),
+          cellPaint,
+        );
 
         // Texte de la valeur
         if (value != 0) {
           final textPainter = TextPainter(
             text: TextSpan(
               text: '$value',
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.black,
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold,
@@ -76,6 +86,7 @@ class BoardPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
+    // Redessine si les valeurs changent
+    return true;
   }
 }
